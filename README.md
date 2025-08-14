@@ -3,6 +3,18 @@
 MOTE:
 This project was published in 2017 at this address https://sourceforge.net/projects/brute-force-algo-trading/ (please download the test .csv file from this address as it exceeds the maximum size allowed in the github repositories)
 
+## Preamble  
+
+The world of trading is often glamorized as a realm where skill, intuition, and discipline can turn modest investments into vast fortunes. Yet beneath the surface lies a far less romantic truth: trading is, at its core, a zero-sum game. For every trader who walks away with profits, there must be another who absorbs the loss. This fundamental reality shapes the entire ecosystem, ensuring that while a select few accumulate staggering wealth, the majority—especially individual traders—find themselves on the losing end of the equation.  
+
+The mechanics are simple but unforgiving. Every trade requires two parties—one buying, the other selling. If the buyer profits, the seller loses an equivalent amount, and vice versa. Over time, this dynamic funnels money from the many to the few, not by chance, but by design. The winners in this game are not necessarily the most talented or disciplined traders, but those with the deepest pockets, the fastest technology, and the most sophisticated tools.  
+
+Financial behemoths like BlackRock, Vanguard, and Citadel operate on a different playing field entirely. They pour billions into artificial intelligence, high-frequency trading algorithms, and infrastructure that allows them to execute orders in microseconds. These systems detect patterns invisible to the human eye, exploit fleeting market inefficiencies, and react to news faster than any individual ever could. The result is a relentless extraction of capital from the market, siphoned away from smaller participants who simply cannot compete.  
+
+It’s a battle akin to a chess grandmaster facing off against an AI—no matter how brilliant the human mind, it cannot outcalculate a machine built for pure efficiency. Similarly, even the most skilled retail traders are at a structural disadvantage against institutions wielding AI-driven strategies. The game is rigged not by conspiracy, but by the sheer asymmetry of resources. When the profits of a handful of firms are mathematically offset by the losses of countless individuals, the outcome is inevitable.  
+
+For the average trader, this means the odds are stacked overwhelmingly against them. The dream of beating the market persists, of course, fueled by stories of outliers who defy the odds. But these are exceptions, not the rule. The cold arithmetic of zero-sum dynamics ensures that, in the long run, the house always wins. The only real question is whether the players at the table realize it before their capital is gone.
+
 # Project Narrative: Democratizing High-Performance AI Trading
 
 It has long been understood that the world’s largest financial institutions—such as **BlackRock**, **Vanguard**, **Citadel**, **Renaissance Technologies**, and **Two Sigma**—dominate the markets not only through capital but through access to cutting-edge technology. These firms invest hundreds of millions into proprietary systems that leverage artificial intelligence, high-frequency trading, and GPU-accelerated computation. The development costs and technical complexity of such systems make them inaccessible to independent traders and small firms.
