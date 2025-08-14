@@ -250,3 +250,104 @@ By publishing the project in 2018, I positioned myself at the frontier of a tech
 Today, AI-driven trading is no longer a niche—it is the foundation of modern market operations. But back in 2018, the idea of using brute force GPU computation to discover optimal strategies was considered experimental, even radical. The release of *Brute Force Algo Trading* marked a moment where open-source innovation met institutional-grade technology, and where a single developer could challenge the status quo of financial engineering.
 
 Looking back, the project was more than software. It was a statement: that advanced algorithmic discovery should not be the exclusive domain of billion-dollar firms. It was a call to democratize access to high-performance computing and to reimagine how trading strategies are created, tested, and deployed. And in doing so, it placed me—quietly but unmistakably—among the pioneers of AI in financial trading.
+
+# Parallel Execution of Brute Force Algo Trading on NVIDIA GPUs
+
+The Brute Force Algo Trading system is inherently designed for parallel computation. Its core logic, as defined in the `Core.cs` file, revolves around the repeated simulation of trading strategies across a historical dataset. Each iteration involves randomized parameter generation, strategy evaluation, and performance tracking. This structure makes it an ideal candidate for GPU acceleration, where thousands of strategy simulations can be executed concurrently.
+
+To deploy this system on NVIDIA GPUs, the computational workload must be offloaded from the CPU to the GPU using CUDA. Since the project is written in C#, the most effective way to achieve this is through Hybridizer Essentials, a compiler that translates C# code into CUDA kernels. This allows the developer to retain the high-level structure of the code while executing performance-critical loops on the GPU.
+
+The main loop in `TestStrategy`, which iterates over thousands of strategy configurations, can be parallelized by converting it into a GPU kernel. Each thread on the GPU would be responsible for simulating a unique strategy instance, using its own randomized parameters and accessing shared historical data. The caching mechanisms for trend detection (`CacheTrendUp`, `CacheTrendDown`, etc.) can be preloaded into GPU memory to minimize latency during execution.
+
+Performance metrics such as USD gain, drawdown, and relative performance are computed independently for each thread. Once all threads complete their simulations, the results are aggregated on the host side to identify the best-performing configurations. This aggregation step can also be parallelized using reduction techniques available in CUDA.
+
+To implement this architecture, the following steps are required:
+
+1. Refactor the strategy simulation logic into a GPU-compatible method, ensuring that all data structures are serializable and memory-safe.
+2. Use Hybridizer to compile the C# method into a CUDA kernel, mapping each strategy simulation to a GPU thread.
+3. Allocate GPU memory for historical data, parameter ranges, and result buffers.
+4. Launch the kernel with a grid size corresponding to the number of strategy permutations to be tested.
+5. Retrieve and rank the results on the CPU, updating the `Stats` objects and storing the best configurations.
+
+This approach enables the system to scale across multiple GPUs, each handling tens of thousands of strategy evaluations per second. By distributing the workload across a GPU cluster, the system transforms into a high-throughput strategy discovery engine capable of real-time adaptation and continuous optimization.
+
+In summary, the Brute Force Algo Trading codebase is well-suited for parallel execution on NVIDIA GPUs. With minimal refactoring and the use of Hybridizer, the system can achieve massive computational acceleration, making it a powerful tool for financial research, algorithmic development, and high-frequency trading innovation.
+
+## GPU Memory Allocation for Parallel Strategy Simulation
+
+The Brute Force Algo Trading system, as defined in the `Core.cs` module, is structured around the repeated simulation of trading strategies using randomized parameters and historical price data. Each simulation is independent and stateless, making the entire process ideal for parallel execution on GPU hardware.
+
+To scale this computation across thousands of strategy permutations, the system can be extended to allocate memory directly on NVIDIA GPUs using CUDA. By leveraging Hybridizer Essentials, C# code can be compiled into CUDA kernels, allowing developers to retain the high-level structure of the strategy logic while executing it with GPU-level performance.
+
+The following example demonstrates how to allocate GPU memory for historical price data and strategy parameters, launch a parallel kernel to simulate each strategy, and retrieve the results back to the host. This approach enables the system to evaluate thousands of strategies per second, dramatically accelerating the discovery of optimal configurations.
+
+```csharp
+
+using Hybridizer.Runtime.CUDAImports;
+
+public class GpuAllocator
+{
+    [EntryPoint]
+    public static void AllocateAndInitialize(double[] historicalRates, double[] parameters, double[] results)
+    {
+        int dataLength = historicalRates.Length;
+        int paramLength = parameters.Length;
+
+        // Allocate memory on GPU
+        double* d_historicalRates = (double*)cudaMalloc(sizeof(double) * dataLength);
+        double* d_parameters = (double*)cudaMalloc(sizeof(double) * paramLength);
+        double* d_results = (double*)cudaMalloc(sizeof(double) * paramLength);
+
+        // Copy data from host to device
+        cudaMemcpy(d_historicalRates, historicalRates, sizeof(double) * dataLength, cudaMemcpyKind.cudaMemcpyHostToDevice);
+        cudaMemcpy(d_parameters, parameters, sizeof(double) * paramLength, cudaMemcpyKind.cudaMemcpyHostToDevice);
+
+        // Launch kernel (each thread simulates one strategy)
+        LaunchKernel(d_historicalRates, d_parameters, d_results, dataLength, paramLength);
+
+        // Copy results back to host
+        cudaMemcpy(results, d_results, sizeof(double) * paramLength, cudaMemcpyKind.cudaMemcpyDeviceToHost);
+
+        // Free GPU memory
+        cudaFree(d_historicalRates);
+        cudaFree(d_parameters);
+        cudaFree(d_results);
+    }
+
+    [Kernel]
+    public static void LaunchKernel(double* rates, double* parameters, double* results, int dataLength, int paramLength)
+    {
+        int idx = threadIdx.x + blockIdx.x * blockDim.x;
+        if (idx < paramLength)
+        {
+            double param = parameters[idx];
+            double result = SimulateStrategy(rates, dataLength, param);
+            results[idx] = result;
+        }
+    }
+
+    public static double SimulateStrategy(double* rates, int length, double param)
+    {
+        double usd = 1000.0;
+        double btc = 0.0;
+
+        for (int i = 0; i < length - 1; i++)
+        {
+            // Example logic: buy if rate increases by param threshold
+            if (rates[i + 1] - rates[i] > param)
+            {
+                btc = usd / rates[i];
+                usd = 0;
+            }
+            else if (rates[i + 1] - rates[i] < -param)
+            {
+                usd = btc * rates[i];
+                btc = 0;
+            }
+        }
+
+        return usd + btc * rates[length - 1];
+    }
+}
+
+```
