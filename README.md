@@ -351,3 +351,32 @@ public class GpuAllocator
 }
 
 ```
+
+## From Mining to Market Mastery: Repurposing Computational Power for Scientific Trading
+
+Anyone familiar with cryptocurrency mining understands the raw elegance of computational brute force. In mining, thousands of GPUs race to discover a cryptographic hash that satisfies a predefined condition. This process secures blockchain transactions, validates blocks, and maintains the integrity of decentralized networks. It’s a game of probability and precision, where each solution contributes to a global ledger of trust.
+
+But what if that same computational power could be redirected—not to secure transactions—but to uncover profitable trading strategies?
+
+This is the premise behind GPU-accelerated algorithmic trading. Instead of searching for hashes, the system searches for parameter combinations that yield consistent profits when tested against historical market data. Each strategy is treated as a hypothesis, and the GPU becomes the laboratory.
+
+Just as mining involves testing billions of hashes per second, this approach involves testing billions of strategy permutations. The goal is not to guess what might work, but to verify what does work—using the same scientific rigor that Galileo applied when observing celestial motion.
+
+### A Scientific Approach to Strategy Discovery
+
+Traditional trading often relies on intuition, heuristics, or empirical indicators. But these methods are prone to bias and lack reproducibility. In contrast, GPU-based strategy discovery embraces the Galilean method: formulate a hypothesis, run experiments, observe outcomes, and refine the model.
+
+Each strategy is simulated across historical price charts. The results are not speculative—they are empirical. The system doesn’t ask “what if?” It asks “what happened?” and builds its conclusions from data, not dogma.
+
+### Mining Knowledge Instead of Coins
+
+In mining, the reward is a coin. In GPU trading, the reward is insight. The process is analogous: both involve massive parallelism, deterministic rules, and measurable outcomes. But while mining secures the past, trading strategies seek to predict the future—based on the patterns of the past.
+
+This shift represents a philosophical evolution. It’s no longer about extracting value from cryptographic puzzles, but from market behavior itself. And just as mining democratized access to digital currency, GPU trading aims to democratize access to institutional-grade analytics.
+
+### Beyond Wall Street
+
+Large hedge funds like Citadel and Renaissance Technologies have already embraced this paradigm, investing billions in AI and GPU infrastructure. But the project behind *tradingStrategyAI* was born with a different mission: to make this power available to independent traders.
+
+By repurposing the same technology that once fueled the crypto boom, this system offers a new frontier—where scientific experimentation meets financial strategy, and where every GPU cycle is a step toward market mastery.
+
